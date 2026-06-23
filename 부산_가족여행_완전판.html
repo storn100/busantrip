@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부산 3박 4일 · 가족 여행</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --ink:#0d2b33; --ink-soft:#4a6b72; --paper:#eef4f3; --card:#fff;
+    --line:#d6e4e2; --sea:#0e7c86; --meal:#ff6b4a;
+    --d1:#0e7c86; --d2:#e8763a; --d3:#1f9d8b; --d4:#4c6ef5;
+    --shadow:0 6px 22px rgba(13,43,51,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+    color:var(--ink); background:var(--paper);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:0 16px}
+
+  /* ── HERO ── */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg,#0b5563 0%,#0e7c86 55%,#16a3a0 100%);
+    color:#fff;padding:36px 0 0;
+  }
+  .hero .wrap{position:relative;z-index:2}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:#bdeae6;margin-bottom:12px}
+  .hero h1{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1.08}
+  .hero h1 .accent{color:#ffd9a8}
+  .hero .meta{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px 9px;font-size:13px}
+  .hero .meta span{
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+    padding:4px 10px;border-radius:999px;font-weight:500;
+  }
+  .wave{display:block;width:100%;height:40px;margin-top:22px}
+
+  /* ── TAB NAV ── */
+  .tab-bar{
+    position:sticky;top:0;z-index:50;
+    background:var(--card);border-bottom:2px solid var(--line);
+    display:flex;
+  }
+  .tab-btn{
+    flex:1;padding:13px 4px;font-size:13.5px;font-weight:700;
+    color:var(--ink-soft);background:none;border:none;cursor:pointer;
+    border-bottom:3px solid transparent;margin-bottom:-2px;
+    transition:color .18s,border-color .18s;letter-spacing:-.01em;
+  }
+  .tab-btn.active{color:var(--sea);border-bottom-color:var(--sea)}
+  .tab-btn:hover:not(.active){color:var(--ink)}
+
+  /* ── TAB PANELS ── */
+  .tab-panel{display:none;padding-bottom:64px}
+  .tab-panel.active{display:block}
+
+  /* ── MAP PANEL ── */
+  .map-wrap{
+    margin:24px 0 0;border-radius:16px;overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .map-wrap iframe{display:block;width:100%;height:520px;border:none}
+  .map-legend{
+    background:var(--card);padding:16px 20px;
+    display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;
+    border-top:1px solid var(--line);
+  }
+  .leg{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600}
+  .leg-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+
+  /* ── ROUTE STRIP ── */
+  .route{
+    background:var(--card);border-radius:16px;box-shadow:var(--shadow);
+    margin:24px 0 0;padding:18px 8px 16px;position:relative;
+  }
+  .route-track{display:flex;align-items:flex-start}
+  .stop{flex:1;text-align:center;position:relative;padding-top:22px}
+  .stop::before{content:"";position:absolute;top:6px;left:0;right:0;height:3px;background:var(--line)}
+  .stop:first-child::before{left:50%}
+  .stop:last-child::before{right:50%}
+  .stop .dot{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:15px;height:15px;border-radius:50%;border:3px solid #fff;
+    box-shadow:0 0 0 2px currentColor;background:currentColor;
+  }
+  .stop .d-day{font-size:11px;font-weight:700;letter-spacing:.05em;color:currentColor}
+  .stop .d-date{font-size:12px;font-weight:600;color:var(--ink);margin-top:2px}
+  .stop .d-area{font-size:11px;color:var(--ink-soft);margin-top:1px;line-height:1.3}
+  .s1{color:var(--d1)}.s2{color:var(--d2)}.s3{color:var(--d3)}.s4{color:var(--d4)}
+
+  /* ── DAY CARDS ── */
+  .day{margin-top:22px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .day-head{padding:15px 20px;color:#fff;display:flex;align-items:center;gap:12px}
+  .day-1 .day-head{background:linear-gradient(100deg,#0e7c86,#16a3a0)}
+  .day-2 .day-head{background:linear-gradient(100deg,#e8763a,#f0a04b)}
+  .day-3 .day-head{background:linear-gradient(100deg,#1f9d8b,#54c5a8)}
+  .day-4 .day-head{background:linear-gradient(100deg,#4c6ef5,#7a93f7)}
+  .day-num{font-size:12px;font-weight:800;letter-spacing:.06em;background:rgba(255,255,255,.2);border-radius:8px;padding:4px 9px;white-space:nowrap}
+  .day-head h2{font-size:17px;font-weight:700;letter-spacing:-.01em}
+  .day-head .sub{font-size:12px;opacity:.9;font-weight:500;margin-top:1px}
+  .day-head .stay{margin-left:auto;font-size:11px;text-align:right;opacity:.95;line-height:1.35;white-space:nowrap}
+  .stay b{display:block;font-size:9px;font-weight:700;letter-spacing:.12em;opacity:.8}
+
+  /* ── TIMELINE ── */
+  .tl{padding:8px 20px 16px}
+  .item{display:flex;gap:14px;position:relative;padding:10px 0}
+  .item::before{content:"";position:absolute;left:53px;top:0;bottom:0;width:2px;background:var(--line)}
+  .item:first-child::before{top:22px}
+  .item:last-child::before{bottom:auto;height:22px}
+  .time{flex:0 0 40px;text-align:right;font-size:12px;font-weight:700;color:var(--ink);padding-top:1px;font-variant-numeric:tabular-nums}
+  .node{flex:0 0 14px;display:flex;justify-content:center;position:relative;z-index:1;padding-top:4px}
+  .node i{width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid var(--sea);display:block}
+  .day-1 .node i{border-color:var(--d1)}
+  .day-2 .node i{border-color:var(--d2)}
+  .day-3 .node i{border-color:var(--d3)}
+  .day-4 .node i{border-color:var(--d4)}
+  .item.meal .node i{background:var(--meal);border-color:var(--meal)}
+  .body{flex:1;min-width:0}
+  .body .t{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+  .body .n{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.45}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle;transform:translateY(-1px)}
+  .tag.meal{background:#ffe6df;color:#d6492a}
+  .tag.move{background:#e3edff;color:#3358cc}
+  .tag.staytag{background:#e6f6f0;color:#157a5b}
+  .tag.book{background:#fff2d6;color:#b5790a}
+
+  /* ── INFO PANELS ── */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+  .panel{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px}
+  .panel h3{font-size:12.5px;font-weight:800;letter-spacing:.04em;color:var(--sea);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .panel h3::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--meal);flex-shrink:0}
+  .panel ul{list-style:none}
+  .panel li{font-size:12.5px;padding:5px 0 5px 14px;position:relative;color:var(--ink);line-height:1.5;border-bottom:1px dashed var(--line)}
+  .panel li:last-child{border-bottom:0}
+  .panel li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%;background:var(--sea)}
+  .panel li b{font-weight:700}
+  .panel .muted{color:var(--ink-soft)}
+  .stays .row{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .stays .row:last-child{border-bottom:0}
+  .stays .dd{font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--sea);flex:0 0 74px}
+  .stays .pl{font-size:13px;font-weight:600}
+  .stays .pl small{display:block;font-size:11px;color:var(--ink-soft);font-weight:500}
+  .foot{text-align:center;color:var(--ink-soft);font-size:11.5px;margin-top:22px;line-height:1.6;padding-bottom:4px}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:540px){
+    .hero h1{font-size:29px}
+    .grid{grid-template-columns:1fr}
+    .stop .d-area{display:none}
+    .day-head{flex-wrap:wrap}
+    .day-head .stay{margin-left:0;width:100%;margin-top:4px}
+    .map-legend{grid-template-columns:1fr}
+    .map-wrap iframe{height:400px}
+    .tab-btn{font-size:12px}
+  }
+  @media print{
+    .tab-bar{display:none}
+    .tab-panel{display:block!important}
+    .map-wrap iframe{height:350px}
+    .day,.panel{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Busan · Family Trip 2025</div>
+    <h1>부산 <span class="accent">3박 4일</span><br>여름 가족 여행</h1>
+    <div class="meta">
+      <span>📅 7/30(목) – 8/2(일)</span>
+      <span>👨‍👩‍👧 4인 · 나 · 아내 · 딸 · 장모님</span>
+      <span>🚗 렌트카 7/30 12시 → 8/1 12시</span>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#eef4f3" d="M0,26 C180,40 320,6 540,18 C760,30 900,2 1120,14 C1280,22 1380,34 1440,26 L1440,40 L0,40 Z"/>
+  </svg>
+</header>
+
+<!-- TAB BAR -->
+<nav class="tab-bar" role="tablist">
+  <button class="tab-btn active" onclick="switchTab(event,'map')" role="tab">🗺 지도</button>
+  <button class="tab-btn" onclick="switchTab(event,'schedule')" role="tab">📋 일정표</button>
+  <button class="tab-btn" onclick="switchTab(event,'info')" role="tab">ℹ️ 안내</button>
+</nav>
+
+<!-- ════════════════════════════════════
+     TAB 1 · 지도
+════════════════════════════════════ -->
+<div id="tab-map" class="tab-panel active">
+  <div class="wrap">
+
+    <!-- DAY 선택 버튼 -->
+    <div style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap">
+      <button onclick="showDay(1)" id="dbtn-1" class="dbtn dbtn-active"
+        style="flex:1;min-width:70px;padding:8px 4px;border-radius:10px;border:2px solid var(--d1);background:var(--d1);color:#fff;font-weight:700;font-size:12.5px;cursor:pointer">
+        DAY 1<br><span style="font-weight:500;font-size:11px">영도·송도</span>
+      </button>
+      <button onclick="showDay(2)" id="dbtn-2" class="dbtn"
+        style="flex:1;min-width:70px;padding:8px 4px;border-radius:10px;border:2px solid var(--d2);background:#fff;color:var(--d2);font-weight:700;font-size:12.5px;cursor:pointer">
+        DAY 2<br><span style="font-weight:500;font-size:11px">기장·케이블카</span>
+      </button>
+      <button onclick="showDay(3)" id="dbtn-3" class="dbtn"
+        style="flex:1;min-width:70px;padding:8px 4px;border-radius:10px;border:2px solid var(--d3);background:#fff;color:var(--d3);font-weight:700;font-size:12.5px;cursor:pointer">
+        DAY 3<br><span style="font-weight:500;font-size:11px">송도→해운대</span>
+      </button>
+      <button onclick="showDay(4)" id="dbtn-4" class="dbtn"
+        style="flex:1;min-width:70px;padding:8px 4px;border-radius:10px;border:2px solid var(--d4);background:#fff;color:var(--d4);font-weight:700;font-size:12.5px;cursor:pointer">
+        DAY 4<br><span style="font-weight:500;font-size:11px">해운대·복귀</span>
+      </button>
+    </div>
+
+    <!-- 지도 iframe 컨테이너 -->
+    <div class="map-wrap" id="map-container">
+      <!-- DAY1 지도 -->
+      <div id="map-day1" style="display:block">
+        <iframe
+          src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyAF0UIR0QX_0454PNKGPrh2V2Tr3XL5tVY&origin=이재모피자+부산역점&destination=송도통큰조개+부산&waypoints=아르떼뮤지엄+부산+영도|흰여울문화마을+부산|태종대+부산&mode=driving&language=ko"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          style="width:100%;height:520px;border:none;display:block">
+        </iframe>
+        <div class="map-legend">
+          <div class="leg"><span class="leg-dot" style="background:var(--d1)"></span>10:00 이재모피자 부산역점</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d1)"></span>13:00 아르떼뮤지엄 (영도)</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d1)"></span>15:00 흰여울문화마을</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d1)"></span>16:00 태종대</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--meal)"></span>19:00 🍽 송도통큰조개 (저녁)</div>
+        </div>
+      </div>
+      <!-- DAY2 지도 -->
+      <div id="map-day2" style="display:none">
+        <iframe
+          src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyAF0UIR0QX_0454PNKGPrh2V2Tr3XL5tVY&origin=국립해양박물관+부산+영도&destination=송도해상케이블카+부산&waypoints=합천국밥+부산+남구+용호로|해동용궁사+기장|광안리해수욕장+부산&mode=driving&language=ko"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          style="width:100%;height:520px;border:none;display:block">
+        </iframe>
+        <div class="map-legend">
+          <div class="leg"><span class="leg-dot" style="background:var(--d2)"></span>09:00 국립해양박물관 (영도)</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--meal)"></span>11:30 🍽 합천국밥 (미쉐린)</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d2)"></span>14:00 해동용궁사 (기장)</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d2)"></span>16:45 광안리·광안대교</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d2)"></span>18:30 송도해상케이블카 (일몰)</div>
+        </div>
+      </div>
+      <!-- DAY3 지도 -->
+      <div id="map-day3" style="display:none">
+        <iframe
+          src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyAF0UIR0QX_0454PNKGPrh2V2Tr3XL5tVY&origin=엘모멘토송도+부산+서구+송도&destination=해운대해수욕장+부산&waypoints=해운대역+부산|우일종합시장+해운대+부산|동백섬+누리마루+해운대&mode=driving&language=ko"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          style="width:100%;height:520px;border:none;display:block">
+        </iframe>
+        <div class="map-legend">
+          <div class="leg"><span class="leg-dot" style="background:var(--d3)"></span>10:30 송도 체크아웃 → 해운대</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d3)"></span>11:45 해운대역 렌트카 반납</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--meal)"></span>12:30 🍽 우일시장 빨간떡볶이</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d3)"></span>14:00 동백섬·누리마루</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--meal)"></span>18:00 🍽 해운대 회 (저녁)</div>
+        </div>
+      </div>
+      <!-- DAY4 지도 -->
+      <div id="map-day4" style="display:none">
+        <iframe
+          src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyAF0UIR0QX_0454PNKGPrh2V2Tr3XL5tVY&origin=블루라인파크+미포정거장+해운대+부산&destination=부산역&waypoints=해운대해수욕장+부산&mode=transit&language=ko"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          style="width:100%;height:520px;border:none;display:block">
+        </iframe>
+        <div class="map-legend">
+          <div class="leg"><span class="leg-dot" style="background:var(--d4)"></span>09:30 블루라인 스카이캡슐 (미포)</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d4)"></span>12:00 해변·카페 마무리</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--meal)"></span>14:00 🍽 부산역 밀면 (점심)</div>
+          <div class="leg"><span class="leg-dot" style="background:var(--d4)"></span>16~17시 KTX 서울 복귀</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 2 · 일정표
+════════════════════════════════════ -->
+<div id="tab-schedule" class="tab-panel">
+  <div class="wrap">
+
+    <!-- ROUTE STRIP -->
+    <nav class="route" aria-label="4일 노선">
+      <div class="route-track">
+        <div class="stop s1"><span class="dot"></span><div class="d-day">DAY 1</div><div class="d-date">7/30 목</div><div class="d-area">영도·송도</div></div>
+        <div class="stop s2"><span class="dot"></span><div class="d-day">DAY 2</div><div class="d-date">7/31 금</div><div class="d-area">기장·케이블카</div></div>
+        <div class="stop s3"><span class="dot"></span><div class="d-day">DAY 3</div><div class="d-date">8/1 토</div><div class="d-area">송도→해운대</div></div>
+        <div class="stop s4"><span class="dot"></span><div class="d-day">DAY 4</div><div class="d-date">8/2 일</div><div class="d-area">해운대·복귀</div></div>
+      </div>
+    </nav>
+
+    <!-- DAY 1 -->
+    <section class="day day-1">
+      <div class="day-head">
+        <span class="day-num">DAY 1</span>
+        <div><h2>영도 + 송도</h2><div class="sub">7/30 (목) · 부산 도착 → 영도 일주</div></div>
+        <div class="stay"><b>STAY</b>엘모멘토 송도</div>
+      </div>
+      <div class="tl">
+        <div class="item"><div class="time">09:00</div><div class="node"><i></i></div><div class="body"><div class="t">부산역 도착</div><div class="n">코인락커에 짐 보관 · 새벽 KTX 피로 회복</div></div></div>
+        <div class="item meal"><div class="time">10:00</div><div class="node"><i></i></div><div class="body"><div class="t">이재모피자 부산역점<span class="tag meal">아점</span></div><div class="n">10시 오픈 맞춰 일찍 가면 웨이팅↓ · 부산역 도보 3분</div></div></div>
+        <div class="item"><div class="time">12:00</div><div class="node"><i></i></div><div class="body"><div class="t">렌트카 수령<span class="tag move">차</span></div><div class="n">부산역 수령 · 짐은 차에 싣고 가볍게 이동</div></div></div>
+        <div class="item"><div class="time">13:00</div><div class="node"><i></i></div><div class="body"><div class="t">아르떼뮤지엄 (영도)</div><div class="n">실내 미디어아트 · 한낮 더위 피하기 · 온라인 예매 할인</div></div></div>
+        <div class="item"><div class="time">15:00</div><div class="node"><i></i></div><div class="body"><div class="t">흰여울문화마을</div><div class="n">해안 골목과 바다 전망 · 노을 명소</div></div></div>
+        <div class="item"><div class="time">16:00</div><div class="node"><i></i></div><div class="body"><div class="t">태종대</div><div class="n">다누비 순환열차로 편하게 · 절벽·노을</div></div></div>
+        <div class="item"><div class="time">18:00</div><div class="node"><i></i></div><div class="body"><div class="t">송도 엘모멘토 체크인<span class="tag staytag">숙소</span></div><div class="n">15시 이후 바로 입실 · 짐 정리</div></div></div>
+        <div class="item meal"><div class="time">19:00</div><div class="node"><i></i></div><div class="body"><div class="t">송도통큰조개<span class="tag meal">저녁</span></div><div class="n">오션뷰 조개구이 · 송도해변로 79 · 숙소 도보권</div></div></div>
+      </div>
+    </section>
+
+    <!-- DAY 2 -->
+    <section class="day day-2">
+      <div class="day-head">
+        <span class="day-num">DAY 2</span>
+        <div><h2>먼 곳 몰아서 + 케이블카</h2><div class="sub">7/31 (금) · 차로 종일 · 광안대교 경유 복귀</div></div>
+        <div class="stay"><b>STAY</b>엘모멘토 송도</div>
+      </div>
+      <div class="tl">
+        <div class="item"><div class="time">09:00</div><div class="node"><i></i></div><div class="body"><div class="t">국립해양박물관 (영도)</div><div class="n">무료 · 실내 + 수족관 · 09시 오픈 · 송도에서 가까움</div></div></div>
+        <div class="item meal"><div class="time">11:30</div><div class="node"><i></i></div><div class="body"><div class="t">합천국밥집 (남구)<span class="tag meal">점심</span></div><div class="n">미쉐린 빕구르망 돼지국밥 · 브레이크 14:00–14:30 · 하나로마트 주차 1h 무료</div></div></div>
+        <div class="item"><div class="time">14:00</div><div class="node"><i></i></div><div class="body"><div class="t">해동용궁사 (기장)</div><div class="n">바다 위 사찰 · 무료 · 주차 카드 결제만</div></div></div>
+        <div class="item"><div class="time">16:45</div><div class="node"><i></i></div><div class="body"><div class="t">광안리 · 광안대교</div><div class="n">해변 드라이브 + 잠깐 산책</div></div></div>
+        <div class="item"><div class="time">18:30</div><div class="node"><i></i></div><div class="body"><div class="t">송도해상케이블카<span class="tag book">예약</span></div><div class="n">일몰 탑승 · 매표 19:30 마감 · 크리스탈 왕복 22,000원</div></div></div>
+        <div class="item meal"><div class="time">19:30</div><div class="node"><i></i></div><div class="body"><div class="t">송도 숙소에서 편하게<span class="tag meal">저녁</span></div><div class="n">배달·근처 포장으로 장모님 휴식</div></div></div>
+      </div>
+    </section>
+
+    <!-- DAY 3 -->
+    <section class="day day-3">
+      <div class="day-head">
+        <span class="day-num">DAY 3</span>
+        <div><h2>송도 → 해운대</h2><div class="sub">8/1 (토) · 해운대역에서 렌트카 반납</div></div>
+        <div class="stay"><b>STAY</b>플레아드블랑 해운대</div>
+      </div>
+      <div class="tl">
+        <div class="item"><div class="time">09:30</div><div class="node"><i></i></div><div class="body"><div class="t">여유로운 송도 아침</div><div class="n">송도구름산책로·해변 산책, 카페 (숙소 도보권)</div></div></div>
+        <div class="item"><div class="time">10:30</div><div class="node"><i></i></div><div class="body"><div class="t">송도 체크아웃 → 해운대 이동</div><div class="n">짐은 차에 · 드라이브 ~35분</div></div></div>
+        <div class="item"><div class="time">11:15</div><div class="node"><i></i></div><div class="body"><div class="t">플레아드블랑 짐 맡기기<span class="tag staytag">숙소</span></div><div class="n">객실 입실은 15시 · 짐만 먼저</div></div></div>
+        <div class="item"><div class="time">11:45</div><div class="node"><i></i></div><div class="body"><div class="t">해운대역 렌트카 반납<span class="tag move">차</span></div><div class="n">12시 마감 전 반납 · 빨간떡볶이 도보 5분</div></div></div>
+        <div class="item meal"><div class="time">12:30</div><div class="node"><i></i></div><div class="body"><div class="t">우일시장 빨간떡볶이<span class="tag meal">점심</span></div><div class="n">해운대역 도보 5분 · 순대·오뎅도 유명</div></div></div>
+        <div class="item"><div class="time">14:00</div><div class="node"><i></i></div><div class="body"><div class="t">해운대 자유 시간</div><div class="n">동백섬·누리마루 · 더베이101 · 해변 (실내 SEA LIFE)</div></div></div>
+        <div class="item"><div class="time">15:00</div><div class="node"><i></i></div><div class="body"><div class="t">객실 입실 · 휴식<span class="tag staytag">숙소</span></div></div></div>
+        <div class="item meal"><div class="time">18:00</div><div class="node"><i></i></div><div class="body"><div class="t">해운대 회<span class="tag meal">저녁</span></div><div class="n">인근 횟집 · 해변 야경</div></div></div>
+      </div>
+    </section>
+
+    <!-- DAY 4 -->
+    <section class="day day-4">
+      <div class="day-head">
+        <span class="day-num">DAY 4</span>
+        <div><h2>마무리 → KTX</h2><div class="sub">8/2 (일) · 16~17시 부산역 출발</div></div>
+        <div class="stay"><b>STAY</b>서울 복귀</div>
+      </div>
+      <div class="tl">
+        <div class="item"><div class="time">08:30</div><div class="node"><i></i></div><div class="body"><div class="t">체크아웃 · 짐 보관</div><div class="n">프런트에 짐 맡기고 가볍게</div></div></div>
+        <div class="item"><div class="time">09:30</div><div class="node"><i></i></div><div class="body"><div class="t">블루라인 스카이캡슐 + 해변열차<span class="tag book">예약</span></div><div class="n">미포↔청사포 · 1캡슐 4인 · 첫 타임 예약 · 송정까지 여유</div></div></div>
+        <div class="item"><div class="time">12:00</div><div class="node"><i></i></div><div class="body"><div class="t">해변 · 카페 마무리</div><div class="n">짐 픽업 후 부산역 이동 (~40분)</div></div></div>
+        <div class="item meal"><div class="time">14:00</div><div class="node"><i></i></div><div class="body"><div class="t">부산역 밀면 (또는 돼지국밥)<span class="tag meal">점심</span></div><div class="n">일요일 영업 · 여름엔 시원한 밀면</div></div></div>
+        <div class="item"><div class="time">16–17</div><div class="node"><i></i></div><div class="body"><div class="t">KTX 서울역 복귀<span class="tag move">기차</span></div><div class="n">좌석 미리 확보</div></div></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     TAB 3 · 안내
+════════════════════════════════════ -->
+<div id="tab-info" class="tab-panel">
+  <div class="wrap">
+    <div class="grid" style="margin-top:24px">
+      <div class="panel">
+        <h3>미리 예약 · 준비</h3>
+        <ul>
+          <li><b>예약 필수</b> <span class="muted">— 스카이캡슐(첫 타임), 송도케이블카, 아르떼(온라인 할인)</span></li>
+          <li><b>카드 준비</b> <span class="muted">— 해동용궁사 주차 카드 결제만</span></li>
+          <li><b>KTX 좌석</b> <span class="muted">— 7/30 오전 · 8/2 16~17시대 미리 확보</span></li>
+          <li><b>더위 대비</b> <span class="muted">— 한낮 실내(아르떼·해양박물관), 야외는 오전·저녁</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>휴무 확인 완료</h3>
+        <ul>
+          <li>이재모피자 <span class="muted">일요일 휴무 → Day1(목) 배치</span></li>
+          <li>빨간떡볶이 <span class="muted">일·수 휴무 → Day3(토) OK</span></li>
+          <li>국립해양박물관 <span class="muted">월 휴관 → Day2(금) OK</span></li>
+          <li>송도통큰조개 <span class="muted">마지막 주 화요일 휴무 → 목요일 OK</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel stays" style="margin-top:14px">
+      <h3>숙소</h3>
+      <div class="row"><div class="dd">7/30 · 7/31</div><div class="pl">엘모멘토 송도<small>송도해수욕장 · 조개구이·케이블카 도보권 · 체크인 15시</small></div></div>
+      <div class="row"><div class="dd">8/1</div><div class="pl">플레아드블랑<small>해운대해수욕장 · 해운대역·스카이캡슐 인접 · 체크인 15시</small></div></div>
+    </div>
+
+    <!-- 식사 요약 -->
+    <div class="panel" style="margin-top:14px">
+      <h3>식사 일람</h3>
+      <ul>
+        <li><b>Day1 아점</b> <span class="muted">이재모피자 부산역점 (10시 오픈)</span></li>
+        <li><b>Day1 저녁</b> <span class="muted">송도통큰조개 (오션뷰 조개구이)</span></li>
+        <li><b>Day2 점심</b> <span class="muted">합천국밥집 남구 — 미쉐린 빕구르망</span></li>
+        <li><b>Day2 저녁</b> <span class="muted">숙소에서 편하게 (배달·포장)</span></li>
+        <li><b>Day3 점심</b> <span class="muted">우일시장 빨간떡볶이 (해운대역 도보 5분)</span></li>
+        <li><b>Day3 저녁</b> <span class="muted">해운대 인근 횟집</span></li>
+        <li><b>Day4 점심</b> <span class="muted">부산역 밀면 또는 돼지국밥</span></li>
+      </ul>
+    </div>
+
+    <p class="foot">
+      렌트카 있는 7/30 12시–8/1 12시엔 멀고 흩어진 곳(영도·기장)을,<br>
+      차 없는 해운대 이틀은 걸어서 되는 곳 위주로 배치했습니다.<br>
+      <span style="color:var(--sea);font-weight:600">즐거운 부산 여행 되세요 🌊</span>
+    </p>
+  </div>
+</div>
+
+<script>
+  function switchTab(e, id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    document.getElementById('tab-' + id).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  const dayColors = {1:'var(--d1)',2:'var(--d2)',3:'var(--d3)',4:'var(--d4)'};
+  function showDay(n) {
+    for(let i=1;i<=4;i++){
+      const map = document.getElementById('map-day'+i);
+      const btn = document.getElementById('dbtn-'+i);
+      if(map) map.style.display = (i===n)?'block':'none';
+      if(btn){
+        if(i===n){
+          btn.style.background = dayColors[i];
+          btn.style.color = '#fff';
+        } else {
+          btn.style.background = '#fff';
+          btn.style.color = dayColors[i];
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>
